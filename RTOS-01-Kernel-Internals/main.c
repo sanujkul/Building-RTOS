@@ -63,11 +63,26 @@ void main(void)
     //4.Enable global interrupt so that Systick handler works
     __enable_irq();
 
-    if(start){
-        blue_main_Task();
-    }else{
-        red_main_Task();
-    }
+    //Initializing blue_main Task stack
+    *(--sp_blue) = (1U << 24);                        // XPSR                 register of stack frame
+    *(--sp_blue) = (uint32_t)&blue_main_Task;       // PC                   register of stack frame
+    *(--sp_blue) = 0x0000000A;                       // LR (Link register)   register of stack frame
+    *(--sp_blue) = 0x0000000B;                       // R12                  register of stack frame
+    *(--sp_blue) = 0x0000000C;                       // R3                   register of stack frame
+    *(--sp_blue) = 0x0000000D;                       // R2                   register of stack frame
+    *(--sp_blue) = 0x0000000E;                       // R1                   register of stack frame
+    *(--sp_blue) = 0x0000000F;                       // R0                   register of stack frame
+
+    //Initializing red_main Task stack
+    *(--sp_red) = (1U << 24);                       // XPSR                 register of stack frame
+    *(--sp_red) = (uint32_t)&red_main_Task;        // PC                   register of stack frame
+    *(--sp_red) = 0x0000000F;                       // LR (Link register)   register of stack frame
+    *(--sp_red) = 0x0000000A;                       // R12                  register of stack frame
+    *(--sp_red) = 0x0000000C;                       // R3                   register of stack frame
+    *(--sp_red) = 0x0000000E;                       // R2                   register of stack frame
+    *(--sp_red) = 0x0000000A;                       // R1                   register of stack frame
+    *(--sp_red) = 0x0000000B;                       // R0                   register of stack frame
+
     while(1){
 
     }
