@@ -11,4 +11,5 @@ The main puspose of this project was to understand how RTOS kernel works by manu
    stack frame, when the code leaves ISR, it saves the stack frame data from new loaction. Thus PC register is updated too 
    with the data at which we want to execute the instructions (in this case beginning of a function).
    
-   P.S. Manually changing SP register in Code Composer Studio wont change MSP register data and context switching will not be achieved. Therefore MSP register data has to be changed.
+   P.S. Manually changing SP register in Code Composer Studio wont change MSP register data and context switching will not be achieved. Therefore MSP register data has to be changed.  
+   (A good link to read about exception programming: https://www.sciencedirect.com/topics/engineering/main-stack-pointer)
