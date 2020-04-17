@@ -1,3 +1,8 @@
+/*
+ * Kernel Internals
+ */
+
+
 #include "msp.h"
 ////////////////////////////////////
 #define DIR_OUT_P1_0 (uint8_t)0x01   //OR WITH THIS
@@ -10,11 +15,18 @@
 ////////////////////////////////////
 #define RGB_LOOP_TIME 180000
 ////////////////////////////////////
+#define STACK_SIZE 40
+
 //RTOS related variables:
 volatile uint32_t tick; //In the systick handler we will increase its count
 volatile uint32_t _tick;
 
+//Creating Tasks Stack
+uint32_t blue_stack[STACK_SIZE];                //Reserving stack memory for the blue task
+uint32_t red_stack[STACK_SIZE];                 //Reserving stack memory for the red task
 
+uint32_t* sp_blue = &blue_stack[STACK_SIZE]; //Creating two stack pointers for blue and red main tasks
+uint32_t* sp_red  = &red_stack[STACK_SIZE];  //STACK_SIZE is one more than last address
 ////////////////////////////////////
 //Functions:
 void setupUSER_LEDS(void);
@@ -30,20 +42,25 @@ int red_main_Task(void);
 
 /**
  * main.c
+ * 1. Stop  WDT
+ * 2. Setup GPIOs
+ * 3. Systick Timer setup (= 30KHz)
+ * 4. Enabling Interrupt
  */
 void main(void)
 {
     uint32_t volatile start = 0U; //Initialized to 0 unsigned integer
     //1. Stopping watchdog timer
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
 
-	//2. Setting up GPIOs
-	setupUSER_LEDS();
+    //2. Setting up GPIOs
+    setupUSER_LEDS();
 
-	//3. SystickTimer
-//	uint32_t system_clk = SystemCoreClock; //By default SystemCoreClock = 3 MHz;
+    //3. SystickTimer
+//  uint32_t system_clk = SystemCoreClock; //By default SystemCoreClock = 3 MHz;
     SysTick_Config(SystemCoreClock/100);
-    //Enable global interrupt so that Systick handler works
+
+    //4.Enable global interrupt so that Systick handler works
     __enable_irq();
 
     if(start){
@@ -57,6 +74,15 @@ void main(void)
 
 }
 
+////////////////////////////////////////////////////////////
+/////////////// TASKS
+////////////////////////////////////////////////////////////
+
+/*
+ * This function  is like a task
+ * It blinks blue LED
+ */
+
 int blue_main_Task(void){
     while(1){
         blueOn();
@@ -66,6 +92,11 @@ int blue_main_Task(void){
     }
 }
 
+/*
+ * This function  is like a task
+ * It blinks RED LED
+ */
+
 int red_main_Task(void){
     while(1){
         redOn();
@@ -74,6 +105,13 @@ int red_main_Task(void){
         delays(1);
     }
 }
+////////////////////////////////////////////////////////////
+/////////////// RTOS Helper functions and IRS
+////////////////////////////////////////////////////////////
+
+/*
+ * This is standard weak function in ARM CORTEX MCUs
+ */
 
 void SysTick_Handler(void){
     ++tick;
@@ -82,7 +120,9 @@ void SysTick_Handler(void){
 /*
  * Below function is similar to STM32 HAL delay
  * that is use to get the tick difference.
- * _tick = tick; is like critical section. therefore we make it mutually exclusive
+ * _tick = tick; is a critical section.
+ * therefore we make it mutually exclusive
+ * by disabling all all interrupts
  */
 uint32_t getTick(void){
     __disable_irq();
@@ -93,7 +133,7 @@ uint32_t getTick(void){
 }
 /*
  * This delay function causes some waste of time.
- * .\i.e. CPU runs without doing anything.
+ * .\i.e. CPU is being used without doing anything.
  * We can use this to get a delay
  */
 void delays(uint32_t seconds){
@@ -105,6 +145,10 @@ void delays(uint32_t seconds){
     }
 
 }
+
+////////////////////////////////////////////////////////////
+/////////////// NORMAL GPIO Functions
+////////////////////////////////////////////////////////////
 
 
 void setupUSER_LEDS(void){

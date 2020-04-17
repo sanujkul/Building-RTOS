@@ -13,5 +13,5 @@
 	<createSlaveProjects value=""/>
 	<templateProperties value="id=com.ti.common.project.core.emptyProjectWithMainTemplate_msp432"/>
 	<filesToOpen value="main.c"/>
-	<origin value="/Users/sanujkul/CCSworkspace_v9/RTOS-01-Kernel-Internals"/>
+	<origin value="/Users/sanujkul/Documents/Udemy/RTOS-01-Kernel-Internals"/>
 </projectOptions>
