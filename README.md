@@ -1,5 +1,5 @@
 # Building-RTOS
-Building up a RTOS for Texas Instruments' MSP432P4111 Development board
+Building up a RTOS for Texas Instruments' MSP432P4111 Development board. We are using TI's Code Composer Studio for programming
 
 ## Development Process:
 
