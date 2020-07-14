@@ -35,6 +35,12 @@ Note:
 //GLOBAL VARIABLES
 volatile uint32_t tick;	//Ticks of clock
 volatile uint32_t _tick; //A variable that is used for work on tick
+	//Stack
+uint32_t greenUsrStack[40];
+uint32_t greenExtStack[40];
+
+uint32_t *sp_green_usr = &greenUsrStack[40];		//Stack for task related to Green USR LED
+uint32_t *sp_green_ext = &greenExtStack[40];		//Stack for task related to Green EXT LED
 
 // FUNCTION DEFINITIONS
 void GPIO_Init(void);
@@ -47,16 +53,32 @@ void greenExtOff(void);
 int greenUsrMain(void);
 int greenExtMain(void);
 	
+/////////////////////////////////////////////////////////////////////////////////
+/// MAIN CODE
+/////////////////////////////////////////////////////////////////////////////////
 int main(){
-	uint32_t volatile start = 0U;
+
 	//1,2. Initializing the GPIO pins
 	GPIO_Init();
 	
-	if(start){
-		greenUsrMain();
-	}else{
-		greenExtMain();
-	}
+	//We will initialize the stack in the order of exception STACK
+	*(--sp_green_usr) = (1U << 24); 	/*XPSR REG - We set 24th bit 1 to tell uP that to run in thumb mode*/
+	*(--sp_green_usr) = (uint32_t)&greenUsrMain;/*PC Register - Pointing to the Task Associated to it*/
+	*(--sp_green_usr) = 0x0000000FU;  
+	*(--sp_green_usr) = 0x0000000AU; 
+	*(--sp_green_usr) = 0x0000000CU;
+	*(--sp_green_usr) = 0x0000000CU;
+	*(--sp_green_usr) = 0x00000001U;
+	*(--sp_green_usr) = 0x00000003U;
+	
+	*(--sp_green_ext) = (1U << 24); 	/*XPSR REG - We set 24th bit 1 to tell uP that to run in thumb mode*/
+	*(--sp_green_ext) = (uint32_t)&greenExtMain;/*PC Register - Pointing to the Task Associated to it*/
+	*(--sp_green_ext) = 0x0000000BU;  
+	*(--sp_green_ext) = 0x0000000AU; 
+	*(--sp_green_ext) = 0x0000000BU;
+	*(--sp_green_ext) = 0x0000000AU;
+	*(--sp_green_ext) = 0x00000005U;
+	*(--sp_green_ext) = 0x00000001U;
 	
 	while(1){
 		//INFINITTE LOOP
@@ -83,6 +105,7 @@ int greenExtMain(void){
 		greenExtOff();
 		Delays(50);
 	}
+	
 }
 
 

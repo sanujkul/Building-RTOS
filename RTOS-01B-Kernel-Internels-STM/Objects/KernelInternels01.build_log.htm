@@ -22,17 +22,29 @@ Dialog DLL:      TCM.DLL V1.46.0.0
  
 <h2>Project:</h2>
 D:\Windows Workspaces\RTOS Projects\Building-RTOS\RTOS-01B-Kernel-Internels-STM\KernelInternels01.uvprojx
-Project File Date:  07/12/2020
+Project File Date:  07/14/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.14', folder: 'D:\Windows Applications\Keil_uVision_v5\Core\ARM\ARMCLANG\Bin'
 Rebuild target 'STM32F446RE'
 assembling startup_stm32f446xx.s...
 compiling system_stm32f4xx.c...
-main.c(90): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
+main.c(42): warning: no previous extern declaration for non-static variable 'sp_green_usr' [-Wmissing-variable-declarations]
+uint32_t *sp_green_usr = &greenUsrStack[40];            //Stack for task related to Green USR LED
+          ^
+main.c(42): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint32_t *sp_green_usr = &greenUsrStack[40];            //Stack for task related to Green USR LED
+^
+main.c(43): warning: no previous extern declaration for non-static variable 'sp_green_ext' [-Wmissing-variable-declarations]
+uint32_t *sp_green_ext = &greenExtStack[40];            //Stack for task related to Green EXT LED
+          ^
+main.c(43): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint32_t *sp_green_ext = &greenExtStack[40];            //Stack for task related to Green EXT LED
+^
+main.c(115): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
 void SysTick_Handler(void){
      ^
-main.c(90): note: declare 'static' if the function is not intended to be used outside of this translation unit
+main.c(115): note: declare 'static' if the function is not intended to be used outside of this translation unit
 void SysTick_Handler(void){
 ^
 static 
@@ -48,11 +60,23 @@ volatile uint32_t _tick; //A variable that is used for work on tick
 main.c(37): note: declare 'static' if the variable is not intended to be used outside of this translation unit
 volatile uint32_t _tick; //A variable that is used for work on tick
          ^
-3 warnings generated.
+main.c(39): warning: no previous extern declaration for non-static variable 'greenUsrStack' [-Wmissing-variable-declarations]
+uint32_t greenUsrStack[40];
+         ^
+main.c(39): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint32_t greenUsrStack[40];
+^
+main.c(40): warning: no previous extern declaration for non-static variable 'greenExtStack' [-Wmissing-variable-declarations]
+uint32_t greenExtStack[40];
+         ^
+main.c(40): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint32_t greenExtStack[40];
+^
+7 warnings generated.
 compiling main.c...
 linking...
-Program Size: Code=716 RO-data=484 RW-data=4 ZI-data=1640  
-".\Objects\KernelInternels01.axf" - 0 Error(s), 3 Warning(s).
+Program Size: Code=824 RO-data=484 RW-data=12 ZI-data=1960  
+".\Objects\KernelInternels01.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -79,8 +103,8 @@ Package Vendor: Keil
 
    * Component: Keil::Device:Startup:2.6.3
       Source file:   MDK\Device\Source\ARM\STM32F446xx_OPT.s
-      Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f446xx.s
+      Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 Build Time Elapsed:  00:00:01
