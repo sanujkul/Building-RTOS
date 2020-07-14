@@ -29,33 +29,30 @@ Project File Date:  07/12/2020
 Rebuild target 'STM32F446RE'
 assembling startup_stm32f446xx.s...
 compiling system_stm32f4xx.c...
-main.c(91): warning: no newline at end of file [-Wnewline-eof]
-}
- ^
-main.c(88): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
+main.c(90): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
 void SysTick_Handler(void){
      ^
-main.c(88): note: declare 'static' if the function is not intended to be used outside of this translation unit
+main.c(90): note: declare 'static' if the function is not intended to be used outside of this translation unit
 void SysTick_Handler(void){
 ^
 static 
-main.c(34): warning: no previous extern declaration for non-static variable 'tick' [-Wmissing-variable-declarations]
+main.c(36): warning: no previous extern declaration for non-static variable 'tick' [-Wmissing-variable-declarations]
 volatile uint32_t tick; //Ticks of clock
                   ^
-main.c(34): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+main.c(36): note: declare 'static' if the variable is not intended to be used outside of this translation unit
 volatile uint32_t tick; //Ticks of clock
          ^
-main.c(35): warning: no previous extern declaration for non-static variable '_tick' [-Wmissing-variable-declarations]
-volatile uint32_t _tick;
+main.c(37): warning: no previous extern declaration for non-static variable '_tick' [-Wmissing-variable-declarations]
+volatile uint32_t _tick; //A variable that is used for work on tick
                   ^
-main.c(35): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-volatile uint32_t _tick;
+main.c(37): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+volatile uint32_t _tick; //A variable that is used for work on tick
          ^
-4 warnings generated.
+3 warnings generated.
 compiling main.c...
 linking...
-Program Size: Code=688 RO-data=484 RW-data=4 ZI-data=1640  
-".\Objects\KernelInternels01.axf" - 0 Error(s), 4 Warning(s).
+Program Size: Code=716 RO-data=484 RW-data=4 ZI-data=1640  
+".\Objects\KernelInternels01.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -81,10 +78,10 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.4.0
 
    * Component: Keil::Device:Startup:2.6.3
-      Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
       Source file:   MDK\Device\Source\ARM\STM32F446xx_OPT.s
-      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f446xx.s
       Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f446xx.s
+      Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 Build Time Elapsed:  00:00:01
 </pre>
